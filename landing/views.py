@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
-from .models import isPasswordValid
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import isPasswordValid, isTelephoneValid
 from user.models import Traveller, Guide
 
 # Create your views here.
@@ -45,8 +47,6 @@ class SignUp(View):
                 user = User.objects.create_user(username=username, email=email, password=password)
                 user.save()
 
-                #Log user in and direct to settings page 
-
                 #create a Traveller object for the new user
                 userModel = User.objects.get(username=username)
                 newTraveller = Traveller.objects.create(user=userModel, userID = userModel.id)
@@ -57,11 +57,64 @@ class SignUp(View):
             context = {'username': username, 'email': email}
             return render(request, 'landing/signup.html', context)
         
-        return render(request, 'landing/signup.html')
-
 class LogIn(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'landing/login.html')
 
     def post(self, request, *args, **kwargs):
-        return render(request, 'landing/login.html')
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = auth.authenticate(username = username, password = password)
+
+        if user is not None:
+            auth.login(request, user)
+            return redirect('profile')
+        else:
+            messages.info(request, "Incorrect username or password, please retry")
+            return redirect('login')
+
+class GuideSignup(LoginRequiredMixin, View):
+    login_url = 'login'
+    redirect_field_name = 'redirect_to'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, 'landing/guidesignup.html')
+    
+    def post(self, request, *args, **kwargs):
+        firstname = request.POST['firstname']
+        lastname = request.POST['lastname']
+        telephone = request.POST['telephone']
+        context = { 'firstname': firstname, 'lastname': lastname, 'telephone': telephone}
+
+        if firstname == "" or lastname == "" or telephone == "":
+            messages.info(request, 'All fields must be filled')
+            return render(request, 'landing/guidesignup.html', context)
+        
+        if not isTelephoneValid(telephone):
+            messages.info(request, 'Invalid phone number')
+            context = {'firstname': firstname, 'lastname': lastname, 'telephone': ''}
+            return render(request, 'landing/guidesignup.html', context)
+
+        #create a Guide object for the user only if he doe not have one already
+        try:
+            userModel = User.objects.get(username=request.user.username)
+            guide = Guide.objects.get(user=userModel) 
+            messages.info(request, 'You are already registered as a guide')
+            context = {'firstname': '', 'lastname': '', 'telephone': ''}
+            return render(request, 'landing/guidesignup.html', context)
+        except ObjectDoesNotExist:
+            traveller = Traveller.objects.get(user=userModel)
+            traveller.isGuide = True
+            traveller.save()
+            newGuide = Guide.objects.create(user=userModel, userID=userModel.id, firstName=firstname, lastName=lastname, telephone=telephone)
+            newGuide.save()
+            return redirect('profile')
+
+class LogOut(LoginRequiredMixin,View):
+    login_url = 'login'
+    redirect_field_name = 'redirect_to'
+
+    def get(self, request, *args, **kwargs):
+        auth.logout(request)
+        return redirect('login')

@@ -9,7 +9,12 @@ def isPasswordValid(password):
         return False
     return True
 
-#for loop that iterates through a loop 
-
-
+#function that verifys that the telephone number is valid and that it is all digits
+def isTelephoneValid(telephone):
+    if len(telephone) == 10:
+        for digits in telephone:
+            if not digits.isdigit():
+                return False
+        return True
+    return False 
 

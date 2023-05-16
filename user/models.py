@@ -14,7 +14,7 @@ class Traveller(models.Model):
 
     firstName = models.TextField(blank=True)
     lastName = models.TextField(blank=True)
-    
+    isGuide = models.BooleanField(default=False)
     bio = models.TextField(blank=True)
     profilePic = models.ImageField(upload_to='profileImages', default = 'pfp.png')
     location = models.CharField(max_length=100, blank=True)
@@ -29,6 +29,7 @@ class Guide(models.Model):
 
     firstName = models.TextField(blank=True)
     lastName = models.TextField(blank=True)
+    telephone = models.TextField()
     
     bio = models.TextField(blank=True)
     profilePic = models.ImageField(upload_to='profileImages', default = 'pfp.png')
