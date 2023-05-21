@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'core',
     'landing',
     'user',
+    'settings',
     
     'crispy_forms',
     'debug_toolbar',

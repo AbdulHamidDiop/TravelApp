@@ -21,40 +21,45 @@ class SignUp(View):
         context = {
             'username': username,
             'email': email,
+            'password': password,
+            'password2': password2
         }
 
         if username == ""  or email == "" or password == "":
             messages.info(request, 'All fields must be filled')
-            context = {'username': username, 'email': email}
+            context = {'username': username, 'email': email, 'password': password, 'password2': password2}
             return render(request, 'landing/signup.html', context)
         
         if not isPasswordValid(password):
             messages.info(request, 'Password must have at least 8 caracters including at least 1 number')
-            context = {'username': username, 'email': email}
+            context = {'username': username, 'email': email, 'password': '', 'password2': ''}
             return render(request, 'landing/signup.html', context)
 
         if password == password2:
             if User.objects.filter(email=email).exists():
                 messages.info(request, 'Email already in use')
-                context = {'username': username, 'email': ''}
+                context = {'username': username, 'email': '', 'password': password, 'password2': password2}
                 return render(request, 'landing/signup.html', context)
             
             elif User.objects.filter(username=username).exists():
                 messages.info(request, 'Username already taken')
-                context = {'username': '', 'email': email}
+                context = {'username': '', 'email': email, 'password': password, 'password2': password2}
                 return render(request, 'landing/signup.html', context)
             else:
                 user = User.objects.create_user(username=username, email=email, password=password)
                 user.save()
+                #log the user in and redirect to initialsetup page
+                userLogin = auth.authenticate(username=username, password=password)
+                auth.login(request, userLogin)
 
                 #create a Traveller object for the new user
                 userModel = User.objects.get(username=username)
                 newTraveller = Traveller.objects.create(user=userModel, userID = userModel.id)
                 newTraveller.save()
-                return redirect('login')
+                return redirect('settings')
         else:
             messages.info(request, "Passwords don't match, please retry")
-            context = {'username': username, 'email': email}
+            context = {'username': username, 'email': email, 'password': password, 'password2': ''}
             return render(request, 'landing/signup.html', context)
         
 class LogIn(View):
@@ -66,9 +71,15 @@ class LogIn(View):
         password = request.POST['password']
 
         user = auth.authenticate(username = username, password = password)
-
+        user2 = User.objects.filter(email = username).first()
+        if user2 is not None:
+            user2 = auth.authenticate(username = user2.username, password = password)
+        
         if user is not None:
             auth.login(request, user)
+            return redirect('profile')
+        elif user2 is not None:
+            auth.login(request, user2)
             return redirect('profile')
         else:
             messages.info(request, "Incorrect username or password, please retry")
