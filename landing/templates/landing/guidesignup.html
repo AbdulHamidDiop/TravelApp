@@ -43,6 +43,8 @@
         <input type="text" class="landingformfield w-input" autofocus="true" maxlength="256" name="lastname" data-name="lastname" placeholder="Last name" id="lastname" value="{{ lastname }}">
         <input type="text" class="landingformfield w-input" autofocus="true" maxlength="256" name="telephone" data-name="telephone" placeholder="Phone number" id="telephone-2" value="{{ telephone }}">
         <input type="submit" value="Submit" data-wait="Please wait..." class="submit-button landingbutton w-button"></form>
+        <br>
+        <a href="/login/" class="link landingtextlink">Currently logged in as {{ user.username }}</a>
       <div class="w-form-done">
         <div>Thank you! Your submission has been received!</div>
       </div>

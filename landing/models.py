@@ -1,6 +1,18 @@
 from django.db import models
 
 # Create your models here.
+def isNameValid(name):
+    if len(name) > 20:
+        return False
+    if not name.isalpha():
+        return False
+    return True
+
+def isUsernameValid(username):
+    if len(username) > 15:
+        return False
+    return True
+
 def isPasswordValid(password):
     if len(password) < 8:
         return False
@@ -9,7 +21,6 @@ def isPasswordValid(password):
         return False
     return True
 
-#function that verifys that the telephone number is valid and that it is all digits
 def isTelephoneValid(telephone):
     if len(telephone) == 10:
         for digits in telephone:
@@ -17,4 +28,5 @@ def isTelephoneValid(telephone):
                 return False
         return True
     return False 
+
 

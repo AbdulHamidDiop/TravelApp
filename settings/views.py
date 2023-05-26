@@ -9,3 +9,10 @@ class Settings(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         return render(request, 'settings/settings.html')
+
+class ProfileSettings(LoginRequiredMixin, View):
+    login_url = '/login/'
+    redirect_field_name = 'redirect_to'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, 'settings/profile.html')

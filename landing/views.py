@@ -4,7 +4,7 @@ from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import isPasswordValid, isTelephoneValid
+from .models import isNameValid, isUsernameValid, isPasswordValid, isTelephoneValid
 from user.models import Traveller, Guide
 
 # Create your views here.
@@ -33,6 +33,11 @@ class SignUp(View):
         if not isPasswordValid(password):
             messages.info(request, 'Password must have at least 8 caracters including at least 1 number')
             context = {'username': username, 'email': email, 'password': '', 'password2': ''}
+            return render(request, 'landing/signup.html', context)
+        
+        if not isUsernameValid(username):
+            messages.info(request, 'Username must have at most 15 caracters')
+            context = {'username': '', 'email': email, 'password': password, 'password2': password2}
             return render(request, 'landing/signup.html', context)
 
         if password == password2:
@@ -107,6 +112,11 @@ class GuideSignup(LoginRequiredMixin, View):
             context = {'firstname': firstname, 'lastname': lastname, 'telephone': ''}
             return render(request, 'landing/guidesignup.html', context)
 
+        if not isNameValid(firstname) or not isNameValid(lastname):
+            messages.info(request, 'Invalid legal name')
+            context = {'firstname': '', 'lastname': '', 'telephone': telephone}
+            return render(request, 'landing/guidesignup.html', context)
+        
         #create a Guide object for the user only if he doe not have one already
         try:
             userModel = User.objects.get(username=request.user.username)

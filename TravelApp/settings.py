@@ -37,7 +37,13 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 INSTALLED_APPS = [
-    'core',
+    #core apps
+    'dashboard',
+    'chats',
+    'tripsfeed',
+    'explore',
+    'userprofile',
+
     'landing',
     'user',
     'settings',

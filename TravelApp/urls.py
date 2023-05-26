@@ -21,9 +21,15 @@ from django.conf.urls.static import static
 import debug_toolbar
 
 urlpatterns = [
-    path('', include('core.urls')),
+    #core urls
+    path('dashboard/', include('dashboard.urls')),
+    path('chats/', include('chats.urls')),
+    path('tripsfeed/', include('tripsfeed.urls')),
+    path('explore/', include('explore.urls')),
+    path('profile/', include('userprofile.urls')),
+
     path('', include('landing.urls')),
-    path('', include('settings.urls')),
+    path('settings/', include('settings.urls')),
     
     path('accounts/', include('allauth.urls')),
     path('admin/', admin.site.urls),
