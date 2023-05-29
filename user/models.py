@@ -17,7 +17,7 @@ class Traveller(models.Model):
     isGuide = models.BooleanField(default=False)
     profilePic = models.ImageField(upload_to='profileImages', default = 'pfp.png')
     location = models.CharField(max_length=100, blank=True)
-    bio = models.TextField(blank=True)
+    bio = models.CharField(max_length = 200,blank=True)
 
     preferences = models.OneToOneField(TravellerPreferences, on_delete=models.CASCADE, default=1, blank=True)
     def __str__(self):
