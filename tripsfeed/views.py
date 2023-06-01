@@ -9,3 +9,10 @@ class TripsFeed(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         return render(request, 'tripsfeed/tripsfeed.html')
+    
+class CreateTrip(LoginRequiredMixin, View):
+    login_url = '/login/'
+    redirect_field_name = 'redirect_to'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, 'tripsfeed/createtrip.html')

@@ -54,7 +54,7 @@
         <a href="/explore/" class="sidenavlink mobile w-inline-block"><img src="{% static 'wfassets/images/exploreIcon.png' %}" loading="lazy" sizes="(max-width: 479px) 6vw, (max-width: 1279px) 30px, (max-width: 1919px) 2vw, 30px" srcset="{% static 'wfassets/images/exploreIcon-p-500.png' %} 500w, {% static 'wfassets/images/exploreIcon.png' %} 512w" alt="" class="sidenavicon mobile">
           <div class="text-block navtext mobile">Explore</div>
         </a>
-        <a href="/profile/" class="sidenavlink mobile w-inline-block"><img src="{% static 'wfassets/images/profileIcon.png' %}" loading="lazy" sizes="(max-width: 479px) 6vw, (max-width: 1279px) 30px, (max-width: 1919px) 2vw, 30px" srcset="{% static 'wfassets/images/profileIcon-p-500.png' %} 500w, {% static 'wfassets/images/profileIcon.png' %} 512w" alt="" class="sidenavicon mobile">
+        <a href="/profile/" class="sidenavlink mobile w-inline-block"><img src="{{traveller.profilePic.url}}" loading="lazy" sizes="(max-width: 479px) 6vw, (max-width: 1279px) 30px, (max-width: 1919px) 2vw, 30px" srcset="{{traveller.profilePic.url}} 500w, {{traveller.profilePic.url}} 512w" alt="" class="sidenavicon mobile profile">
           <div class="text-block navtext mobile">Profile</div>
         </a>
       </div>
@@ -67,7 +67,7 @@
     <div data-animation="default" data-collapse="none" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="navbar-2 settingsnavbar w-nav">
       <div class="settingsnavdiv">
         <nav role="navigation" class="settingsmenu mobile w-nav-menu">
-          <a href="#" class="settingsnavlink active mobile w-inline-block">
+          <a href="/settings/profile/" class="settingsnavlink active mobile w-inline-block">
             <div class="text-block settingsnavtext mobile">Profile</div>
           </a>
           <a href="/settings/profile/" class="settingsnavlink mobile w-inline-block">
