@@ -27,6 +27,7 @@ urlpatterns = [
     path('tripsfeed/', include('tripsfeed.urls')),
     path('explore/', include('explore.urls')),
     path('profile/', include('userprofile.urls')),
+    path('', include('tripsfeed.urls')),
 
     path('', include('landing.urls')),
     path('settings/', include('settings.urls')),

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from user.models import Traveller, TravellerPreferences
+from user.models import Traveller
 from django.contrib.auth.models import User
 from django.contrib import messages
 from landing.models import isNameValid, isUsernameValid
@@ -14,6 +14,7 @@ class Settings(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         traveller = Traveller.objects.get(user=request.user)
         context = {'traveller': traveller}
+
         return render(request, 'settings/settings.html', context)
     
     def post(self, request, *args, **kwargs):

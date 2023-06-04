@@ -84,10 +84,10 @@ class LogIn(View):
         
         if user is not None:
             auth.login(request, user)
-            return redirect('profile')
+            return redirect('tripsfeed')
         elif user2 is not None:
             auth.login(request, user2)
-            return redirect('profile')
+            return redirect('tripsfeed')
         else:
             messages.info(request, "Incorrect username or password, please retry")
             return redirect('login')

@@ -1,6 +1,5 @@
 from django.db import models
 import uuid
-import user.models
 import datetime
 # Create your models here.
 class Trip(models.Model):
@@ -14,9 +13,29 @@ class Trip(models.Model):
     startDate = models.DateField()
     endDate = models.DateField(blank=True)
     partySize = models.SmallIntegerField(default=2)
-    description = models.TextField()
+    pins = models.IntegerField(default=0)
+    description = models.TextField(blank=True)
     
     isReady = models.BooleanField(default=False)
 
+    def partySizeString(self):
+        if self.partySize == 0:
+            return "any size"
+        elif self.partySize == 1:
+            return "1-3"
+        elif self.partySize == 2:
+            return "4-6"
+        elif self.partySize == 3:
+            return "7-9"
+        elif self.partySize == 4:
+            return "10+"
+        
     def __str__(self):
-        return self.user
+        return self.country + " with " + self.user
+
+class PinTrip(models.Model):
+    tripID = models.CharField(max_length=500)
+    username = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.username
